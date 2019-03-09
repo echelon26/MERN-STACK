@@ -18,7 +18,7 @@ router.get('/', (req, res) =>{
 
 //-------------------post the data-------------------------
 
-router.post('/add', (req, res) =>{
+router.post('/add', (req, res) => {
 let person = new personModel(req.body);
     person.save().then(person => {
         res.status(200).json(person);
@@ -43,7 +43,7 @@ router.put('/update/:id', (req, res) => {
 
 //delete data---------------------------------------------
 
-router.delete('/delete/:id', (req, res) =>{
+router.delete('/delete/:id', (req, res) => {
     personModel.findOneAndRemove(req.body.id,(error, data)=> {
         if(error) {
             res.status(400).json({error:'Unable to delete'});
