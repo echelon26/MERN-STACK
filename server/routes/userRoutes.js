@@ -21,9 +21,12 @@ const userRouter = express.Router();
 //     });
 // });
 
+// ----------------------logout code-------------------------------------
+
 userRouter.get('/logout',(req,res) => {
     res.status(200).send({auth:false, token: null,message:'Successfully logout'})
 });
+//---------------------signin code--------------------------------------------
 
 userRouter.post('/signin',(req, res) => {
     userModel.findOne({email: req.body.email}, (error, user) => {
@@ -44,7 +47,7 @@ userRouter.post('/signin',(req, res) => {
     })
 });
 
-//-------------------------------------------------------
+//----------------------signup code----------------------------------------------
 userRouter.post('/signup',(req, res) => {
     let hashedPassword = bcrypt.hashSync(req.body.password, 8);
     let userData =new userModel({
@@ -55,7 +58,7 @@ userRouter.post('/signup',(req, res) => {
     let token = jsonWebToken.sign(
         {id: userData._id},
         config.secret, {expiresIn:86400});
-
+        console.log(userData);;
         userData.save().then(() => {
         res.status(200).send({auth:true,token:token});
     }).catch((error) => {
@@ -63,8 +66,16 @@ userRouter.post('/signup',(req, res) => {
     })
 });
 
-//userRouter.put();
-
-//userRouter.delete();
+userRouter.delete('/delete/:id',(req, res) => {
+    userModel.findOneAndDelete(req.params.id,(error, data) =>
+    {
+        if(error) {
+            res.status(500).send('unable to remove');
+        }
+        else {
+            res.status(200).json({data,dataMessage:'Removed'});
+        }
+    });
+});
 
 module.exports = userRouter;
