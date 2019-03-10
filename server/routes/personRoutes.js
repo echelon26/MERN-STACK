@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const personModel = require('../model/model');
+const personRouter = express.Router();
+const personModel = require('../model/personModel');
 
 // fetching the records-----------------------------------
 
-router.get('/', (req, res) =>{
+personRouter.get('/', (req, res) =>{
     personModel.find((error, data) => {
         if(error){
             console.log("Unable to fetch data");
@@ -18,7 +18,8 @@ router.get('/', (req, res) =>{
 
 //-------------------post the data-------------------------
 
-router.post('/add', (req, res) => {
+personRouter.post('/add', (req, res) => {
+    console.log(req.body);
 let person = new personModel(req.body);
     person.save().then(person => {
         res.status(200).json(person);
@@ -29,7 +30,7 @@ let person = new personModel(req.body);
 
 //-------------update data---------------------------------
 
-router.put('/update/:id', (req, res) => {
+personRouter.put('/update/:id', (req, res) => {
 
     personModel.findOneAndUpdate(req.body.id, req.body, (error,data)=>{
         if(error) {
@@ -43,7 +44,7 @@ router.put('/update/:id', (req, res) => {
 
 //delete data---------------------------------------------
 
-router.delete('/delete/:id', (req, res) => {
+personRouter.delete('/delete/:id', (req, res) => {
     personModel.findOneAndRemove(req.body.id,(error, data)=> {
         if(error) {
             res.status(400).json({error:'Unable to delete'});
@@ -55,4 +56,4 @@ router.delete('/delete/:id', (req, res) => {
 
 });
 
-module.exports = router;
+module.exports = personRouter;
